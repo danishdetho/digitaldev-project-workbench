@@ -1,0 +1,54 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\Source\\Repos\\Workbench-SP-AzF-test\\Workbench-SP-AzF-test.csproj": {}
+  },
+  "projects": {
+    "D:\\Source\\Repos\\Workbench-SP-AzF-test\\Workbench-SP-AzF-test.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Source\\Repos\\Workbench-SP-AzF-test\\Workbench-SP-AzF-test.csproj",
+        "projectName": "Workbench-SP-AzF-test",
+        "projectPath": "D:\\Source\\Repos\\Workbench-SP-AzF-test\\Workbench-SP-AzF-test.csproj",
+        "packagesPath": "C:\\Users\\danis\\.nuget\\packages\\",
+        "outputPath": "D:\\Source\\Repos\\Workbench-SP-AzF-test\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\danis\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net461"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net461": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net461": {
+          "dependencies": {
+            "Microsoft.NET.Sdk.Functions": {
+              "target": "Package",
+              "version": "[1.0.8, )"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.113\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
