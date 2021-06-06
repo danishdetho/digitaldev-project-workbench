@@ -36,7 +36,7 @@ try
         Connect-PnPOnline -Url $adminSiteURL -Tenant $tenant.value -ClientId $clientId.value -Thumbprint $thumbprint.value
         $siterequest = Set-PnPListItem -List $siterequestlist -Identity $siterequestitemID -Values @{"ProvisioningStage" = "Site Created";"Status" = "Provisioned"}
     }
-    $site    
+    return $name
 }
 catch
 {

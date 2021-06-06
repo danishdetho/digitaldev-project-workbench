@@ -18,7 +18,7 @@ try
     if($site -ne  $null)
     {   
         Write-Host "Site Found"
-        Invoke-PnPSiteTemplate -Path "D:\home\site\WorkBenchTemplate\mastersite.xml"  -ResourceFolder "D:\home\site\WorkBenchTemplate\"  -ClearNavigation -OverwriteSystemPropertyBagValues -ExcludeHandlers SiteSettings,Features,ApplicationLifecycleManagement,RegionalSettings,SearchSettings
+        Invoke-PnPSiteTemplate -Path "D:\home\site\WorkBenchTemplate\mastersite.xml"  -ResourceFolder "D:\home\site\WorkBenchTemplate\"  -ClearNavigation -OverwriteSystemPropertyBagValues -ExcludeHandlers SiteSettings,Features,ApplicationLifecycleManagement,RegionalSettings,SearchSettings,ContentTypes,Fields,TermGroups
         Write-Host "Template Content Applied Successfully"
 
         Connect-PnPOnline -Url $adminSiteURL -Tenant $tenant.value -ClientId $clientId.value -Thumbprint $thumbprint.value

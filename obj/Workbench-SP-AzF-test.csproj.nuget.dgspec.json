@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Source\\Repos\\Workbench-SP-AzF-test\\Workbench-SP-AzF-test.csproj": {}
+    "C:\\Users\\danis\\Source\\Repos\\danishdetho\\digitaldev-project-workbench\\Workbench-SP-AzF-test.csproj": {}
   },
   "projects": {
-    "D:\\Source\\Repos\\Workbench-SP-AzF-test\\Workbench-SP-AzF-test.csproj": {
+    "C:\\Users\\danis\\Source\\Repos\\danishdetho\\digitaldev-project-workbench\\Workbench-SP-AzF-test.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Source\\Repos\\Workbench-SP-AzF-test\\Workbench-SP-AzF-test.csproj",
+        "projectUniqueName": "C:\\Users\\danis\\Source\\Repos\\danishdetho\\digitaldev-project-workbench\\Workbench-SP-AzF-test.csproj",
         "projectName": "Workbench-SP-AzF-test",
-        "projectPath": "D:\\Source\\Repos\\Workbench-SP-AzF-test\\Workbench-SP-AzF-test.csproj",
+        "projectPath": "C:\\Users\\danis\\Source\\Repos\\danishdetho\\digitaldev-project-workbench\\Workbench-SP-AzF-test.csproj",
         "packagesPath": "C:\\Users\\danis\\.nuget\\packages\\",
-        "outputPath": "D:\\Source\\Repos\\Workbench-SP-AzF-test\\obj\\",
+        "outputPath": "C:\\Users\\danis\\Source\\Repos\\danishdetho\\digitaldev-project-workbench\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

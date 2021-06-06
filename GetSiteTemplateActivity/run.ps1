@@ -18,7 +18,7 @@ try
     {
         Write-Host "Template Master Site Found"
        
-        Get-PnPSiteTemplate -Out "D:\home\site\WorkBenchTemplate\mastersite.xml" -PersistBrandingFiles -IncludeAllPages  -IncludeSearchConfiguration -IncludeSiteGroups -ExcludeHandlers TermGroups,CustomActions,Lists -Force
+        Get-PnPSiteTemplate -Out "D:\home\site\WorkBenchTemplate\mastersite.xml" -PersistBrandingFiles -IncludeAllPages  -IncludeSiteCollectionTermGroup -IncludeHiddenLists  -IncludeSearchConfiguration -IncludeSiteGroups -ExcludeHandlers CustomActions,Lists -Force
         Write-Host "Master Template Extracted"
         
         #Replace JH Human cause space is failing and Text Allignment 
@@ -45,25 +45,34 @@ try
             Write-Host "Applications and Project Systems Links already exists. " $projectSystemsList.ItemCount
         }
         else {
-
-            Connect-PnPOnline -Url $templatesiteurl -Tenant $tenant.value -ClientId $clientId.value -Thumbprint $thumbprint.value
-            
             Write-Host "Applications and Project Systems doesnt exists."
+            Connect-PnPOnline -Url $templatesiteurl -Tenant $tenant.value -ClientId $clientId.value -Thumbprint $thumbprint.value
+            Add-PnPListFoldersToSiteTemplate -Path "D:\home\site\WorkBenchTemplate\Lists.xml" -List "Project Systems"-Recursive -IncludeSecurity
+            Write-Host "Folders added to Project Systems Lists Succssfully"
+            Add-PnPListFoldersToSiteTemplate -Path "D:\home\site\WorkBenchTemplate\Lists.xml" -List "Featured Site Content"-Recursive -IncludeSecurity
+            Write-Host "Folders added to Featured Contents Lists Succssfully"
             Add-PnPDataRowsToSiteTemplate -Path "D:\home\site\WorkBenchTemplate\Lists.xml"  -Query '<View></View>' -List "Project Systems"
             Write-Host "Data added to Project Systems Lists Succssfully"
             Add-PnPDataRowsToSiteTemplate -Path "D:\home\site\WorkBenchTemplate\Lists.xml"  -Query '<View></View>' -List "Featured Site Content" 
+            Write-Host "Data added to Featured Contents Lists Succssfully"
+            #IMS Lists
+            Add-PnPDataRowsToSiteTemplate -Path "D:\home\site\WorkBenchTemplate\Lists.xml"  -Query '<View></View>' -List "IMS Processes" 
+            Write-Host "Data added to Featured Contents Lists Succssfully"
+            Add-PnPDataRowsToSiteTemplate -Path "D:\home\site\WorkBenchTemplate\Lists.xml"  -Query '<View></View>' -List "IMS Search Links" 
             Write-Host "Data added to Featured Contents Lists Succssfully"
         }
         ((Get-Content -path "D:\home\site\WorkBenchTemplate\Lists.xml" -Raw) -replace 'https://johnholland.sharepoint.com/sites/workbench-template-test',$newsiteurl) | Set-Content -Path "D:\home\site\WorkBenchTemplate\Lists.xml"
         
         #Get Libraries Titles and Generate Templates
+        Connect-PnPOnline -Url $templatesiteurl -Tenant $tenant.value -ClientId $clientId.value -Thumbprint $thumbprint.value
         $DocumentLibraries = Get-PnPList | Where-Object {$_.BaseTemplate -eq 101 -and $_.Hidden -eq $false -and $_.Title -ne "Style Library" -and $_.Title -ne "Documents" -and $_.Title -ne "Form Templates"} #Or $_.BaseType -eq "DocumentLibrary"
         [System.Collections.Generic.List[string]]$docLibTitles = @()
         [System.Collections.Generic.List[string]]$docLibTitles1 = @()
         
         $i = 0
+        $docLibTitlesCount = $DocumentLibraries.Length/2
         foreach($doclib in $DocumentLibraries){
-            if($i -le 13){
+            if($i -le $docLibTitlesCount){
                 $docLibTitles += $doclib.Title
             }
             else{
@@ -80,7 +89,7 @@ try
         Write-Host "Libraries Templates Extracted"
         $i = 0
         foreach($doclib in $DocumentLibraries){
-            if($i -le 13){
+            if($i -le $docLibTitlesCount){
                     Add-PnPListFoldersToSiteTemplate -Path "D:\home\site\WorkBenchTemplate\Libraries.xml" -List $doclib.Title -Recursive -IncludeSecurity
             }
             else{

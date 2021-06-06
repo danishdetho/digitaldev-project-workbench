@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="Workbench-SP-AzF-Prod" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\danis\\Source\\Repos\\danishdetho\\digitaldev-project-workbench\\obj\\Release\\net461\\PubTmp\\Out\\$" />
+  </parameter>
+</parameters>

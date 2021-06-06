@@ -13,7 +13,8 @@ try
     $projectmanager =   $name['projectmanager']
     $officemanager =   $name['officemanager']
     $contentowners =   $name['contentowners']
-
+    $templatesiteurl = $name['templatesiteurl']
+   
     $clientId = ls env:APPSETTING_AzureADApp_ClientID
     $thumbprint = ls env:APPSETTING_AzureADApp_Thumbprint
     $tenant = ls env:APPSETTING_Workbench_Tenant
@@ -78,7 +79,7 @@ try
     }
     
     #Add Links for External Users
-    $folder = Add-PnPFolder -Name "Shared-with-all-external-users" -Folder "Lists/ProjectSystems"
+    <#$folder = Add-PnPFolder -Name "Shared-with-all-external-users" -Folder "Lists/ProjectSystems"
     Set-PnPFolderPermission -List 'Project Systems' -Identity $folder -Group 'Workbench External Users' -AddRole 'Workbench Read'
     $externalUserLink = Add-PnPListItem -List "Project Systems" -Folder "Shared-with-all-external-users" -Values @{"Title" = "Aconex" ;"URL" = "https://www.johnholland.com";"NewTab"="true"; "Icon" = "Globe"; "Comments" = "Construction documentation management system";"Disciplines"="Project Operations, Procurement, Design"; "CoreSystem" = "true"; "Order0" = "10" }
     $externalUserLink = Add-PnPListItem -List "Project Systems" -Folder "Shared-with-all-external-users" -Values @{"Title" = "PPW External" ;"URL" = "https://www.johnholland.com";"NewTab"="true"; "Icon" = "ProjectCollection"; "Comments" = "Project Pack Web"; "CoreSystem" = "true"; "Order0" = "10" }
@@ -86,14 +87,47 @@ try
     $folder = Add-PnPFolder -Name "Shared-with-all-external-users" -Folder "Lists/FeaturedSiteContent"
     Set-PnPFolderPermission -List 'Featured Site Content' -Identity $folder -Group 'Workbench External Users' -AddRole 'Workbench Read'
     $externalUserLink = Add-PnPListItem -List "Featured Site Content" -Folder "Shared-with-all-external-users" -Values @{"Title" = "Org Chart" ;"URL" = "https://www.johnholland.com";"NewTab"="true"; "Icon" = "Org"; "Description" = "View our project org structure";"Featured"="true"; "Order0" = "10" }
-    $externalUserLink = Add-PnPListItem -List "Featured Site Content" -Folder "Shared-with-all-external-users" -Values @{"Title" = "PPW External" ;"URL" = $newsiteurl + "/SitePages/Shared-with-all-external-users/About-The-Project.aspx";"NewTab"="true"; "Icon" = "Info"; "Description" = ""; "Featured" = "true"; "Order0" = "10" }
+    $externalUserLink = Add-PnPListItem -List "Featured Site Content" -Folder "Shared-with-all-external-users" -Values @{"Title" = "About the Project" ;"URL" = $newsiteurl + "/SitePages/Shared-with-all-external-users/About-The-Project.aspx";"NewTab"="true"; "Icon" = "Info"; "Description" = ""; "Featured" = "true"; "Order0" = "10" }
+    #>
+    Connect-PnPOnline -Url $templatesiteurl -Tenant $tenant.value -ClientId $clientId.value -Thumbprint $thumbprint.value
+    $listItemsProjectSys = Get-PnPListItem -List "Project Systems" | Where-Object {$_.FieldValues.FileRef -like "*Shared-with-all-external-users*" -And $_.FileSystemObjectType -ne "Folder"}    
+    $listItemsFeaturedContent = Get-PnPListItem -List "Featured Site Content" | Where-Object {$_.FieldValues.FileRef -like "*Shared-with-all-external-users*" -And $_.FileSystemObjectType -ne "Folder"}    
     
+    Connect-PnPOnline -Url $newsiteurl -Tenant $tenant.value -ClientId $clientId.value -Thumbprint $thumbprint.value
+    foreach ($item in $listItemsProjectSys)
+    {
+        if($item.FieldValues.FileRef -like "*Shared-with-all-external-users-only*" ){
+            Write-Host $item.FieldValues.FileRef $item.FileSystemObjectType $item["Title"] $item["URL"].Url
+            $externalUserLink = Add-PnPListItem -List "Project Systems" -Folder "Shared-with-all-external-users-only" -Values @{"Title" = $item["Title"] ;"URL" = $item["URL"].Url ;"NewTab"=$item["NewTab"]; "Icon" = $item["Icon"]; "Comments" = $item["Comments"];"Disciplines"=$item["Disciplines"]; "CoreSystem" = $item["CoreSystem"]; "Order0" = $item["Order0"] }
+        }
+        else{
+            Write-Host $item.FieldValues.FileRef $item.FileSystemObjectType $item["Title"] $item["URL"].Url
+            $externalUserLink = Add-PnPListItem -List "Project Systems" -Folder "Shared-with-all-external-users" -Values @{"Title" = $item["Title"] ;"URL" = $item["URL"].Url ;"NewTab"=$item["NewTab"]; "Icon" = $item["Icon"]; "Comments" = $item["Comments"];"Disciplines"=$item["Disciplines"]; "CoreSystem" = $item["CoreSystem"]; "Order0" = $item["Order0"] }
+        }
+    }
+    foreach ($item in $listItemsFeaturedContent)
+    {
+        if($item.FieldValues.FileRef -like "*Shared-with-all-external-users*" ){
+            
+            Write-Host $item.FieldValues.FileRef $item.FileSystemObjectType $item["Title"] $item["URL"].Url
+            $url = $item["URL"].Url -replace 'https://johnholland.sharepoint.com/sites/workbench-template-test',$newsiteurl
+            $externalUserLink = Add-PnPListItem -List "Featured Site Content" -Folder "Shared-with-all-external-users" -Values @{"Title" = $item["Title"] ;"URL" = $url  ;"NewTab"=$item["NewTab"]; "Icon" = $item["Icon"]; "Description" = $item["Description"];"Featured" = $item["Featured"]; "Order0" = $item["Order0"] }
+        }
+    }
+   
     #Remove Workbench Site Management Link Item Permissions
-    Set-PnPListItemPermission -List 'Featured Site Content' -Identity 8 -Group 'Accounting' -RemoveRole 'Workbench Read'
-    Set-PnPListItemPermission -List 'Featured Site Content' -Identity 8 -Group 'Commercial' -RemoveRole 'Workbench Read'
-    Set-PnPListItemPermission -List 'Featured Site Content' -Identity 8 -Group 'Finance' -RemoveRole 'Workbench Read'
-    Set-PnPListItemPermission -List 'Featured Site Content' -Identity 8 -Group 'HR' -RemoveRole 'Workbench Read'
-    Set-PnPListItemPermission -List 'Featured Site Content' -Identity 8 -Group 'Workbench Project Staff' -RemoveRole 'Workbench Read'
+    $workbenchManagementLink = Get-PnPListItem -List "Featured Site Content" -Query "<View><Query><Where><Eq><FieldRef Name='Title'/><Value Type='Text'>Workbench Management</Value></Eq></Where></Query></View>"   
+    if($workbenchManagementLink -ne $null){
+        foreach($link in $workbenchManagementLink)
+        {
+            Write-Host $link["Title"]
+            Set-PnPListItemPermission -List 'Featured Site Content' -Identity $link -Group 'Accounting' -RemoveRole 'Workbench Read'
+            Set-PnPListItemPermission -List 'Featured Site Content' -Identity $link -Group 'Commercial' -RemoveRole 'Workbench Read'
+            Set-PnPListItemPermission -List 'Featured Site Content' -Identity $link -Group 'Finance' -RemoveRole 'Workbench Read'
+            Set-PnPListItemPermission -List 'Featured Site Content' -Identity $link -Group 'HR' -RemoveRole 'Workbench Read'
+            Set-PnPListItemPermission -List 'Featured Site Content' -Identity $link -Group 'Workbench Project Staff' -RemoveRole 'Workbench Read'
+        }
+    }
     
     #Remove Recent Node
     Remove-PnPNavigationNode -Title "Recent" -Location QuickLaunch -Force
